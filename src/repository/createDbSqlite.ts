@@ -1,6 +1,11 @@
 import { error } from "node:console";
 import sqlite3 from "sqlite3";
+import DatabaseConfig from "./interfaces/"
 
+
+class SqliteDatabase implements DatabaseConfig{
+
+}
 const db = new sqlite3.Database("database.db", (error) => {
     if (error) {
         throw new Error(`Erro na criação do arquivo .db: ${error.message}`);
