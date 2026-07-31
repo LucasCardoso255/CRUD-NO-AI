@@ -13,7 +13,8 @@ export class UserRepository implements DatabaseConfig{
         return db;
     }
 
-    create_table_users(db:sqlite3.Database): void {
+    create_table_users(db:sqlite3.Database): boolean {
+        let dbCreated = true;
         db.run(` 
             CREATE TABLE IF NOT EXISTS Users (
                 user_id INTEGER PRIMARY KEY,
@@ -23,9 +24,11 @@ export class UserRepository implements DatabaseConfig{
             );  
             `, (error) => {
                 if (error) {
-                    throw new Error(`Erro na criação da tabela Users: ${error.message}`)
+                    dbCreated = false;
+                    throw new Error(`Erro na criação da tabela Users: ${error.message}`);
                 }
-                console.log("Tabela Users criada com sucesso.")
-        })        
+                console.log("Tabela Users criada com sucesso.");
+        })
+        return dbCreated;        
     }
 }

@@ -4,7 +4,6 @@ const fastify = Fastify();
 
 fastify.get('/', async (request, reply) => {
     reply.send({ hello: "world" });
-    
 })
 
 const start = async () => {
