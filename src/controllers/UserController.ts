@@ -3,10 +3,10 @@ import type { FastifyReply, FastifyRequest } from "fastify";
 
 export class UserControlller {
     userController = new UserService();
-    async createDatabase(request: FastifyRequest, reply:FastifyReply) {
+    // async createDatabase(request: FastifyRequest, reply:FastifyReply) {
         
-    }
+    // }
     constructor() {
-        
+
     }
 }
