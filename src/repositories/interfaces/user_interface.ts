@@ -1,18 +1,18 @@
 export type User = {
-    user_id: number,
+    user_id: string,
     user_name: string,
     user_mail: string,
     user_active: number,
 }
 
 export interface DatabaseConfig {
-    database_setup(): object;
-    create_table_users(db_obj: object): boolean;
+    database_setup(): void;
+    create_table_users(): void;
 }
 
 export interface UserRepo {
-    queryUsers(): User[];
-    insertUsers(): User
+    queryUsers(userLimit: number): Promise<User[]>;
+    insertUsers(): Promise<string>
     removeUser(): void
     updateUser(): User
 }
