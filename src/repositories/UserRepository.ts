@@ -20,7 +20,6 @@ export class UserRepository {
 
     async insertUsers(user: User): Promise<string> {
         return new Promise((resolve, reject) => {
-            console.log("PARAMETROS PASSADOS:", user.user_id, user.user_name, user.user_mail, user.user_active)
             db.run("INSERT INTO Users (user_id, user_name, user_mail, user_active) VALUES (?,?,?,?)",
             [user.user_id, user.user_name, user.user_mail, user.user_active], 
             function (error) {
@@ -35,15 +34,3 @@ export class UserRepository {
     }
     
 }
-
-const userRepo = new UserRepository();
-const userteste: User = {
-    user_id: "teste2",
-    user_name: "nome2",
-    user_mail: "email2",
-    user_active: 1
-}
-
-await userRepo.insertUsers(userteste)
-console.log("\nprox:\n")
-console.log(await userRepo.queryUsers());
