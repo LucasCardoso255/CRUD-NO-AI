@@ -2,7 +2,7 @@ import sqlite3 from "sqlite3";
 import type{ User, UserRepo } from "./interfaces/user_interface.js";
 import { db } from "../infra/DbSetupSqlite.js"
 
-export class UserRepository {
+export class UserRepository implements UserRepo {
     async queryUsers(userLimit=20): Promise<User[]> {
         return new Promise((resolve, reject) => {
             let users: User[] = []
@@ -32,5 +32,25 @@ export class UserRepository {
             });
         });
     }
-    
+
+    updateUser(user: User): Promise<string> {
+        return new Promise((resolve, reject) => {
+            db.run("UPDATE Users SET user_id = ?, user_name = ?, user_mail = ?, user_active = ? WHERE user_id = ?",
+                [user.user_id, user.user_name, user.user_mail, user.user_active, user.user_id],
+                function (error) {
+                    if (error) {
+                        console.log("Erro ao executar updateUsers");
+                        reject(error);
+                        return;
+                    }
+                    resolve(`Usuário atualizado com sucesso. \nID: ${this.lastID}\nMudanças: ${this.changes}`);
+            });
+        });
+    }
+
+    removeUser(user: User): Promise<string> {
+        return new Promise((resolve, reject) => {
+           
+        });
+    }
 }
