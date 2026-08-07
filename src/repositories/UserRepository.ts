@@ -1,21 +1,49 @@
-import sqlite3, { Database } from "sqlite3";
+import sqlite3 from "sqlite3";
 import type{ User, UserRepo } from "./interfaces/user_interface.js";
 import { db } from "../infra/DbSetupSqlite.js"
 
-export class UserRepository implements UserRepo{
+export class UserRepository {
     async queryUsers(userLimit=20): Promise<User[]> {
-        let users: User[] = []
-        db.all("SELECT * FROM Users ORDER BY user_name ASC LIMIT ? OFFSET 0", 
+        return new Promise((resolve, reject) => {
+            let users: User[] = []
+            db.all("SELECT * FROM Users ORDER BY user_name ASC LIMIT ? OFFSET 0", 
             [userLimit],
             (error, rows) => {
                 if (error) {
-                    throw new Error("Erro ao consultar usuários", error);                
+                    console.log("Erro ao executar queryUsers");
+                    reject(error)
                 }
-                users = rows as User[]
+                resolve(users = rows as User[])
             })
-            return users
+        });
     }
 
+    async insertUsers(user: User): Promise<string> {
+        return new Promise((resolve, reject) => {
+            console.log("PARAMETROS PASSADOS:", user.user_id, user.user_name, user.user_mail, user.user_active)
+            db.run("INSERT INTO Users (user_id, user_name, user_mail, user_active) VALUES (?,?,?,?)",
+            [user.user_id, user.user_name, user.user_mail, user.user_active], 
+            function (error) {
+                if (error) {
+                    console.log("Erro ao executar insertUsers");
+                    reject(error);
+                    return;
+                }
+                resolve(`Usuário inserido com sucesso. \nID: ${this.lastID}\nMudanças: ${this.changes}`);
+            });
+        });
+    }
     
-
 }
+
+const userRepo = new UserRepository();
+const userteste: User = {
+    user_id: "teste2",
+    user_name: "nome2",
+    user_mail: "email2",
+    user_active: 1
+}
+
+await userRepo.insertUsers(userteste)
+console.log("\nprox:\n")
+console.log(await userRepo.queryUsers());

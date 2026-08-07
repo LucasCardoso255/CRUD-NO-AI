@@ -12,7 +12,7 @@ export interface DatabaseConfig {
 
 export interface UserRepo {
     queryUsers(userLimit: number): Promise<User[]>;
-    insertUsers(): Promise<string>
+    insertUsers(user: User): Promise<string>
     removeUser(): void
     updateUser(): User
 }

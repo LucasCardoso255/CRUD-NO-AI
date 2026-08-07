@@ -14,9 +14,9 @@ class DatabaseSqlite implements DatabaseConfig{
     database_setup(): void {
         this.db = new sqlite3.Database("database.db", (error) => {
             if (error) {
-                throw new Error(`Erro na criação do arquivo .db: ${error.message}`);
+                throw new Error(`Erro na conexão com o banco de dados: ${error.message}`);
             }
-            console.log("Arquivo database criado com sucesso.");
+            console.log("Conexão criada com sucesso.");
         });
     }
 
@@ -40,7 +40,7 @@ class DatabaseSqlite implements DatabaseConfig{
     constructor(){
         try {
             this.database_setup();
-            this.create_table_users();
+            // this.create_table_users();
         } catch (error) {
             console.log("Ocorreu um erro:", error)
         }
