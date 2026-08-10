@@ -18,6 +18,20 @@ export class UserRepository implements UserRepo {
         });
     }
 
+    async getUserById(user_id: string): Promise<User> {
+        return new Promise((resolve, reject) => {
+            db.run("SELECT * FROM Users WHERE user_id = ?", 
+            [user_id],
+            (error) => {
+                if (error) {
+                    console.log("Erro ao executar queryUsers");
+                    reject(error)
+                }
+                resolve(...) // RETORNAR RESULTADO DO DB.RUN
+            })
+        });
+    }
+
     async insertUsers(user: User): Promise<string> {
         return new Promise((resolve, reject) => {
             db.run("INSERT INTO Users (user_id, user_name, user_mail, user_active) VALUES (?,?,?,?)",
