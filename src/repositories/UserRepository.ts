@@ -48,9 +48,18 @@ export class UserRepository implements UserRepo {
         });
     }
 
-    removeUser(user: User): Promise<string> {
+    removeUser(user_id: string): Promise<string> {
         return new Promise((resolve, reject) => {
-           
+           db.run("UPDATE Users SET user_active = 0 WHERE user_id = ?", 
+            [user_id],
+            function (error) {
+                    if (error) {
+                        console.log("Erro ao executar removeUser");
+                        reject(error);
+                        return;
+                    }
+                    resolve(`Usuário removido com sucesso. \nID: ${this.lastID}\nMudanças: ${this.changes}`);
+            });
         });
     }
 }

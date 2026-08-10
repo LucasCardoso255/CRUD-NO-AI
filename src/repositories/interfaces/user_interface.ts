@@ -13,6 +13,6 @@ export interface DatabaseConfig {
 export interface UserRepo {
     queryUsers(userLimit: number): Promise<User[]>;
     insertUsers(user: User): Promise<string>
-    removeUser(user: User): Promise<string>
+    removeUser(user_id: string): Promise<string>
     updateUser(user: User): Promise<string>
 }
