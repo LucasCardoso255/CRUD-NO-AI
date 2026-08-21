@@ -15,4 +15,6 @@ export interface UserRepo {
     insertUsers(user: User): Promise<string>
     removeUser(user_id: string): Promise<string>
     updateUser(user: User): Promise<string>
+    getUserById(user_id: string): Promise<User | undefined>
+    getUserByMail(user_mail: string): Promise<User | undefined>
 }

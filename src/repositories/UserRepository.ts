@@ -5,7 +5,7 @@ import { db } from "../infra/DbSetupSqlite.js"
 export class UserRepository implements UserRepo {
     async queryUsers(userLimit=20): Promise<User[]> {
         return new Promise((resolve, reject) => {
-            let users: User[] = []
+            let users: User[] = [];
             db.all("SELECT * FROM Users ORDER BY user_name ASC LIMIT ? OFFSET 0", 
             [userLimit],
             (error, rows) => {
@@ -18,16 +18,32 @@ export class UserRepository implements UserRepo {
         });
     }
 
-    async getUserById(user_id: string): Promise<User> {
+    async getUserById(user_id: string): Promise<User | undefined> {
         return new Promise((resolve, reject) => {
-            db.run("SELECT * FROM Users WHERE user_id = ?", 
+            db.get("SELECT * FROM Users WHERE user_id = ?", 
             [user_id],
-            (error) => {
+            (error, row) => {
                 if (error) {
-                    console.log("Erro ao executar queryUsers");
+                    console.log("Erro ao executar getUserById");
                     reject(error)
+                    return
                 }
-                resolve(...) // RETORNAR RESULTADO DO DB.RUN
+                resolve(row as User)
+            })
+        });
+    }
+
+    async getUserByMail(user_mail: string): Promise<User | undefined> {
+        return new Promise((resolve, reject) => {
+            db.get("SELECT * FROM Users WHERE user_mail = ?", 
+            [user_mail],
+            (error, row) => {
+                if (error) {
+                    console.log("Erro ao executar getUserByMail");
+                    reject(error)
+                    return
+                }
+                resolve(row as User)
             })
         });
     }
