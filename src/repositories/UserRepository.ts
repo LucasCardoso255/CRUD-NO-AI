@@ -3,17 +3,16 @@ import type{ User, UserRepo } from "./interfaces/user_interface.js";
 import { db } from "../infra/DbSetupSqlite.js"
 
 export class UserRepository implements UserRepo {
-    async queryUsers(userLimit=20): Promise<User[]> {
+    async queryUsers(userLimit: number): Promise<User[]> {
         return new Promise((resolve, reject) => {
-            let users: User[] = [];
-            db.all("SELECT * FROM Users ORDER BY user_name ASC LIMIT ? OFFSET 0", 
+            db.all("SELECT * FROM Users ORDER BY user_name ASC LIMIT ?", 
             [userLimit],
             (error, rows) => {
                 if (error) {
                     console.log("Erro ao executar queryUsers");
                     reject(error)
                 }
-                resolve(users = rows as User[])
+                resolve(rows as User[])
             })
         });
     }

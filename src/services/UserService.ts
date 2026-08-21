@@ -35,7 +35,7 @@ export class UserService {
             this.validateUserParams(user);
             await this.UserRepo.updateUser(user);
         } catch (error) {
-            throw new Error("Não foi possível atualizar o usuário.");
+            throw new Error("Não foi possível atualizar o usuário.", { cause: error });
         }
     }
 
@@ -45,24 +45,28 @@ export class UserService {
             await this.validateDuplicateUserByMail(user.user_mail);
             await this.UserRepo.insertUsers(user);
         } catch (error) {
-            throw new Error("Não foi possível criar o usuário.");
+            throw new Error("Não foi possível criar o usuário.", { cause: error });
         }
     }  
 
-    public async getUsers(userLimit: number) {
+    public async getUsers(userLimit: number=20) {
         try {
             await this.UserRepo.queryUsers(userLimit);
         } catch (error) {
-            throw new Error("Não foi possível consultar usuários.")
+            throw new Error("Não foi possível consultar usuários.", { cause: error })
         }
     }
-    
+
     public async removeUser(user_id: string) {
         try {
             await this.validateUserExists(user_id)
             await this.UserRepo.removeUser(user_id);
         } catch (error) {
-            throw new Error("Não foi possível remover o usuário.")
+            throw new Error("Não foi possível remover o usuário.", { cause: error })
         }
     }
 }
+
+const userService = new UserService();
+
+await userService.getUsers();
