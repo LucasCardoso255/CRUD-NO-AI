@@ -4,7 +4,7 @@ import { UserRepository } from "../repositories/UserRepository.js";
 
 export class UserService {
     private UserRepo = new UserRepository();
-    private validateUserParams(user:User) {
+    private isUserDataValid(user:User) {
         if (!user.user_id) {
             throw new Error("ID de usuário não informado.");
         }
@@ -14,9 +14,12 @@ export class UserService {
         if (!user.user_mail) {
             throw new Error("E-mail de usuário não informado.");
         }
+        if (!user.user_mail.includes("@")) {
+            throw new Error("E-mail inválido.");
+        }
     }
 
-    private async validateDuplicateUserByMail(new_user_mail:string) {
+    private async isUserDuplicated(new_user_mail:string) {
         const existing_user = await this.UserRepo.getUserByMail(new_user_mail);
         if (existing_user) {
             throw new Error("Usuário duplicado na base de dados.");
@@ -32,7 +35,7 @@ export class UserService {
 
     public async updateUser(user: User) {
         try {
-            this.validateUserParams(user);
+            this.isUserDataValid(user);
             await this.UserRepo.updateUser(user);
         } catch (error) {
             throw new Error("Não foi possível atualizar o usuário.", { cause: error });
@@ -40,13 +43,9 @@ export class UserService {
     }
 
     public async createUser(user: User) {
-        try {
-            this.validateUserParams(user);
-            await this.validateDuplicateUserByMail(user.user_mail);
-            await this.UserRepo.insertUsers(user);
-        } catch (error) {
-            throw new Error("Não foi possível criar o usuário.", { cause: error });
-        }
+        this.isUserDataValid(user);
+        await this.isUserDuplicated(user.user_mail);
+        await this.UserRepo.insertUsers(user);
     }  
 
     public async getUsers(userLimit: number=20) {
