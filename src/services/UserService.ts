@@ -23,7 +23,7 @@ export class UserService {
         }
     }
 
-        private async validateUserExists(user_id: string) {
+    private async validateUserExists(user_id: string) {
         const user_exists = await this.UserRepo.getUserById(user_id);
         if (!user_exists) {
             throw new Error("Usuário não encontrado.");
@@ -51,7 +51,8 @@ export class UserService {
 
     public async getUsers(userLimit: number=20) {
         try {
-            await this.UserRepo.queryUsers(userLimit);
+            const users = await this.UserRepo.queryUsers(userLimit);
+            return users;
         } catch (error) {
             throw new Error("Não foi possível consultar usuários.", { cause: error })
         }
@@ -66,7 +67,3 @@ export class UserService {
         }
     }
 }
-
-const userService = new UserService();
-
-await userService.getUsers();
