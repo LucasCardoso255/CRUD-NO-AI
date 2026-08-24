@@ -1,9 +1,9 @@
 import { UserService } from "../services/UserService.js";
-import type { FastifyReply, FastifyRequest } from "fastify";
 import { randomUUID } from "node:crypto";
+import type { FastifyReply, FastifyRequest } from "fastify";
 import type { User } from "../repositories/interfaces/user_interface.js";
 
-type userRequestBody = {
+export type userRequestBody = {
     name: string;
     mail: string;
 }
@@ -21,7 +21,7 @@ export class UserControlller {
         return user;
     }
 
-    private async create(request: FastifyRequest <{ Body: userRequestBody }>, reply: FastifyReply) {
+    async create(request: FastifyRequest <{ Body: userRequestBody }>, reply: FastifyReply) {
         const userObj = this.mountUserObject(request.body.name, request.body.mail);
         try {
             this.userService.createUser(userObj);
@@ -31,19 +31,19 @@ export class UserControlller {
         }
     }
 
-    private async find() {
+    async find() {
 
     }
 
-    private async findAll() {
+    async findAll() {
 
     }
 
-    private async update() {
+    async update() {
 
     }
 
-    private async delete() {
+    async delete() {
 
     }
 }

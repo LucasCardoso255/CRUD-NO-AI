@@ -1,9 +1,17 @@
 import Fastify from "fastify";
+import { UserControlller } from "./controllers/UserController.js";
+import type { userRequestBody } from "./controllers/UserController.js";
+
 
 const fastify = Fastify();
+const userController = new UserControlller(); 
 
 fastify.get('/', async (request, reply) => {
     reply.send({ hello: "world" });
+})
+
+fastify.post<{ Body: userRequestBody }>('/insertUser', async (request, reply) => {
+    return userController.create(request, reply)
 })
 
 const start = async () => {
