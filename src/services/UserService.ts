@@ -20,8 +20,8 @@ export class UserService {
     }
 
     private async isUserDuplicated(new_user_mail:string) {
-        const existing_user = await this.UserRepo.getUserByMail(new_user_mail);
-        if (existing_user) {
+        const result = await this.UserRepo.getUserByMail(new_user_mail);
+        if (result !== undefined) {
             throw new Error("Usuário duplicado na base de dados.");
         }
     }

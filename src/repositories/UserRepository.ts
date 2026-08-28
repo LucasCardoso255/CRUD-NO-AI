@@ -42,7 +42,7 @@ export class UserRepository implements UserRepo {
                     reject(error)
                     return
                 }
-                resolve(row as User)
+                resolve(row as User | undefined)
             })
         });
     }

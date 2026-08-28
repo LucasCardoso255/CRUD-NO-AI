@@ -10,6 +10,10 @@ fastify.get('/', async (request, reply) => {
     reply.send({ hello: "world" });
 })
 
+fastify.get('/users', async (request, reply) => {
+    return userController.findAll(request, reply);
+})
+
 fastify.post<{ Body: userRequestBody }>('/insertUser', async (request, reply) => {
     return userController.create(request, reply)
 })
